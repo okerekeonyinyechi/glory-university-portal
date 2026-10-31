@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glory University | Student Portal</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <i class="fas fa-graduation-cap"></i>
+      <div>Glory <span>University</span></div>
+    </div>
+
+    <nav>
+      <a href="#dashboard" class="nav-link active" data-view="dashboard">
+        <i class="fas fa-chart-pie"></i> Dashboard
+      </a>
+
+      <a href="#register" class="nav-link" data-view="register">
+        <i class="fas fa-user-plus"></i> Register Student
+      </a>
+
+      <a href="#students" class="nav-link" data-view="students">
+        <i class="fas fa-users"></i> All Students
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>Student Management Portal</p>
+      <small>© 2026 Glory University</small>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-area">
+
+    <header class="topbar">
+      <button id="menuToggle" class="icon-btn" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div>
+        <small>GLORY UNIVERSITY</small>
+        <h2 id="pageTitle">Dashboard</h2>
+      </div>
+
+      <div class="top-actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="avatar">GU</div>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="view">
+
+        <div class="welcome">
+          <div>
+            <p>STUDENT MANAGEMENT SYSTEM</p>
+            <h1>Welcome to Glory University 🎓</h1>
+            <span>Manage student registrations and academic records easily.</span>
+            <button class="btn" data-go="register">
+              <i class="fas fa-plus"></i> Register Student
+            </button>
+          </div>
+          <i class="fas fa-graduation-cap welcome-icon"></i>
+        </div>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <i class="fas fa-users blue"></i>
+            <p>Total Students</p>
+            <h2 id="totalStudents">0</h2>
+            <small>Registered students</small>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-book-open purple"></i>
+            <p>Active Courses</p>
+            <h2 id="totalCourses">0</h2>
+            <small>Courses represented</small>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-layer-group green"></i>
+            <p>Academic Levels</p>
+            <h2 id="totalLevels">0</h2>
+            <small>Levels represented</small>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-calendar-check orange"></i>
+            <p>Latest Registration</p>
+            <h2 id="latestRegistration">—</h2>
+            <small>Most recent student</small>
+          </div>
+
+        </div>
+
+        <div class="charts-grid">
+          <div class="panel">
+            <h3>Students by Course</h3>
+            <p>Course distribution</p>
+            <div id="courseChart"></div>
+          </div>
+
+          <div class="panel">
+            <h3>Students by Level</h3>
+            <p>Academic level distribution</p>
+            <div id="levelChart"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <h3>Recent Registrations</h3>
+            <button class="text-btn" data-go="students">View All →</button>
+          </div>
+          <div id="recentStudents"></div>
+        </div>
+
+      </section>
+
+      <!-- REGISTRATION PAGE -->
+      <section id="register" class="view hidden">
+
+        <div class="section-heading">
+          <h2>Student Registration</h2>
+          <p>Fill in the student details below.</p>
+        </div>
+
+        <div class="panel form-panel">
+
+          <h3 id="formTitle">
+            <i class="fas fa-user-plus"></i> New Student
+          </h3>
+
+          <form id="studentForm">
+
+            <div class="form-grid">
+
+              <div class="field full">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" maxlength="100"
+                  placeholder="Enter full name" required>
+              </div>
+
+              <div class="field">
+                <label for="age">Age *</label>
+                <input type="number" id="age" min="1" max="120"
+                  placeholder="Enter age" required>
+              </div>
+
+              <div class="field">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email"
+                  placeholder="student@example.com" required>
+              </div>
+
+              <div class="field">
+                <label for="course">Course *</label>
+                <select id="course" required>
+                  <option value="">Select Course</option>
+                  <option>Computer Science</option>
+                  <option>Software Engineering</option>
+                  <option>Information Technology</option>
+                  <option>Cybersecurity</option>
+                  <option>Data Science</option>
+                  <option>Business Administration</option>
+                  <option>Accounting</option>
+                  <option>Mass Communication</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="level">Academic Level *</label>
+                <select id="level" required>
+                  <option value="">Select Level</option>
+                  <option>100 Level</option>
+                  <option>200 Level</option>
+                  <option>300 Level</option>
+                  <option>400 Level</option>
+                  <option>500 Level</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="resetForm" class="secondary-btn">
+                Clear Form
+              </button>
+              <button type="submit" id="submitButton" class="btn">
+                <i class="fas fa-save"></i> Register Student
+              </button>
+            </div>
+
+            <p id="formMessage" role="status" aria-live="polite"></p>
+
+          </form>
+        </div>
+      </section>
+
+      <!-- STUDENT DIRECTORY -->
+      <section id="students" class="view hidden">
+
+        <div class="section-heading">
+          <h2>Student Directory</h2>
+          <p>View and manage all registered students.</p>
+        </div>
+
+        <div class="panel">
+
+          <div class="directory-toolbar">
+
+            <input type="search" id="searchInput"
+              placeholder="Search name, email, ID or course...">
+
+            <select id="levelFilter">
+              <option value="">All Levels</option>
+              <option>100 Level</option>
+              <option>200 Level</option>
+              <option>300 Level</option>
+              <option>400 Level</option>
+              <option>500 Level</option>
+            </select>
+
+            <button id="exportButton" class="secondary-btn">
+              <i class="fas fa-download"></i> Export CSV
+            </button>
+
+            <button class="btn" data-go="register">
+              <i class="fas fa-plus"></i> Add Student
+            </button>
+
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Student ID</th>
+                  <th>Course</th>
+                  <th>Level</th>
+                  <th>Age</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="studentTableBody"></tbody>
+            </table>
+          </div>
+
+          <p id="resultCount" class="result-count">0 students</p>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
