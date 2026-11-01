@@ -1,641 +1,497 @@
 
-// ======================================
-// GLORY UNIVERSITY - MAIN JAVASCRIPT
-// ======================================
+/* =================================
+   GLORY UNIVERSITY
+   Main JavaScript
+================================= */
 
-const $ = id => document.getElementById(id);
+// DEMO STUDENT DATA
 
-const getData = (key, fallback) => {
-  try {
-    const value = JSON.parse(localStorage.getItem(key));
-    return value ?? fallback;
-  } catch {
-    return fallback;
-  }
-};
+let currentStudent = null;
 
-const saveData = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
-};
+let registeredCourses = [];
 
-let currentUser = getData("guCurrentUser", null);
+let studentPhoto = "";
 
-const courses = [
-  {code:"CSC 201",title:"Introduction to Computer Science",units:3},
-  {code:"CSC 203",title:"Data Structures",units:3},
-  {code:"CSC 205",title:"Computer Programming",units:3},
-  {code:"MTH 201",title:"Mathematical Methods",units:3},
-  {code:"GST 201",title:"Communication in English",units:2},
-  {code:"IFT 201",title:"Information Technology",units:2},
-  {code:"CSC 207",title:"Web Development",units:3},
-  {code:"STA 201",title:"Introduction to Statistics",units:2}
-];
+// SAMPLE ANNOUNCEMENTS
 
 const announcements = [
-  {title:"Registration for the new semester",date:"November 2026",text:"Students are encouraged to complete their course registration before the semester deadline."},
-  {title:"Academic orientation",date:"November 2026",text:"New students should check their departmental information for orientation arrangements."},
-  {title:"Examination preparation",date:"December 2026",text:"Students should confirm their registered courses and prepare for upcoming examinations."}
+    {
+        title: "Welcome to Glory University",
+        message: "Welcome to our student portal. We are glad to have you here."
+    },
+    {
+        title: "Course Registration",
+        message: "Students are encouraged to complete their course registration."
+    },
+    {
+        title: "Academic Activities",
+        message: "Keep checking the academic calendar for important dates."
+    }
 ];
 
-const events = [
-  {date:"November 09, 2026",title:"Resumption and registration",text:"Beginning of the academic registration period."},
-  {date:"November 16, 2026",title:"Lectures commence",text:"First day of lectures for the semester."},
-  {date:"December 14, 2026",title:"Revision period",text:"Academic revision and preparation."},
-  {date:"January 11, 2027",title:"First semester examinations",text:"Tentative examination period."}
-];
+// HELPER: GET ELEMENT
 
-// ======================================
-// GENERAL FUNCTIONS
-// ======================================
-
-function notify(message) {
-  const toast = $("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2800);
+function getElement(id) {
+    return document.getElementById(id);
 }
 
-function initials(name) {
-  return (name || "GU")
-    .trim()
-    .split(/\s+/)
-    .slice(0,2)
-    .map(word => word[0])
-    .join("")
-    .toUpperCase();
-}
+// SHOW HOMEPAGE
 
 function showHome() {
-  $("homePage").classList.remove("hidden");
-  $("authPage").classList.add("hidden");
-  $("portalPage").classList.add("hidden");
-  $("navLinks").classList.remove("open");
-  window.scrollTo(0,0);
+    getElement("home").classList.remove("hidden");
+    getElement("auth-section").classList.add("hidden");
+    getElement("portal-section").classList.add("hidden");
+
+    document.querySelector(".header").classList.remove("hidden");
+    document.querySelector(".footer").classList.remove("hidden");
+
+    window.scrollTo(0, 0);
 }
 
-function openAuth(mode) {
-  $("homePage").classList.add("hidden");
-  $("portalPage").classList.add("hidden");
-  $("authPage").classList.remove("hidden");
+// SHOW LOGIN OR REGISTRATION
 
-  const registering = mode === "register";
+function showAuth(type) {
+    getElement("home").classList.add("hidden");
+    getElement("auth-section").classList.remove("hidden");
+    getElement("portal-section").classList.add("hidden");
 
-  $("authTitle").textContent = registering ? "Create Student Account" : "Student Login";
-  $("authDescription").textContent = registering
-    ? "Enter your information to create your account."
-    : "Welcome back. Sign in to your student account.";
+    document.querySelector(".header").classList.add("hidden");
+    document.querySelector(".footer").classList.add("hidden");
 
-  $("registerFields").classList.toggle("hidden", !registering);
-  $("loginFields").classList.toggle("hidden", registering);
-  $("authSwitch").classList.toggle("hidden", registering);
-  $("loginSwitch").classList.toggle("hidden", !registering);
-  $("authSubmit").textContent = registering ? "Create Account" : "Sign In";
+    getElement("login-form").classList.toggle("hidden", type !== "login");
+    getElement("register-form").classList.toggle("hidden", type !== "register");
 
-  $("authForm").dataset.mode = mode;
-  $("password").value = "";
-  window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }
 
-function toggleMenu() {
-  $("navLinks").classList.toggle("open");
-}
+// REGISTER NEW STUDENT
 
-function toggleSidebar() {
-  $("sidebar").classList.toggle("open");
-}
+getElement("register-form").addEventListener("submit", function(event) {
 
-function togglePassword() {
-  const field = $("password");
-  field.type = field.type === "password" ? "text" : "password";
-}
+    event.preventDefault();
 
-// ======================================
-// AUTHENTICATION
-// ======================================
+    const name = getElement("register-name").value.trim();
+    const email = getElement("register-email").value.trim().toLowerCase();
+    const password = getElement("register-password").value;
+    const department = getElement("register-department").value;
 
-$("authForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  const mode = this.dataset.mode;
-  const password = $("password").value.trim();
-
-  if (password.length < 6) {
-    notify("Password must contain at least 6 characters.");
-    return;
-  }
-
-  const students = getData("guStudents", []);
-
-  if (mode === "register") {
-    const name = $("fullName").value.trim();
-    const email = $("registerEmail").value.trim().toLowerCase();
-    const department = $("department").value;
-    const level = $("level").value;
-
-    if (!name || !email || !department || !level) {
-      notify("Please complete all registration fields.");
-      return;
+    if (!name || !email || !password || !department) {
+        alert("Please complete all the fields.");
+        return;
     }
 
-    if (students.some(student => student.email === email)) {
-      notify("This email is already registered. Please log in.");
-      return;
+    if (password.length < 6) {
+        alert("Your password must contain at least 6 characters.");
+        return;
     }
 
-    const matric = "GU/2026/" +
-      String(students.length + 1).padStart(4,"0");
+    const students = JSON.parse(localStorage.getItem("gloryStudents")) || [];
 
-    const student = {
-      name,
-      email,
-      password,
-      department,
-      level,
-      matric,
-      photo:"",
-      selectedCourses:[],
-      createdAt:new Date().toISOString()
+    const existingStudent = students.find(student => student.email === email);
+
+    if (existingStudent) {
+        alert("An account with this email already exists. Please log in.");
+        showAuth("login");
+        return;
+    }
+
+    const newStudent = {
+        id: "GU/2026/" + String(students.length + 1).padStart(3, "0"),
+        name: name,
+        email: email,
+        password: password,
+        department: department,
+        level: "300 Level",
+        courses: []
     };
 
-    students.push(student);
-    saveData("guStudents", students);
-    currentUser = student;
-    saveData("guCurrentUser", currentUser);
+    students.push(newStudent);
 
-    notify("Account created successfully!");
+    localStorage.setItem("gloryStudents", JSON.stringify(students));
+
+    currentStudent = newStudent;
+
+    registeredCourses = [];
+
+    alert("Registration successful! Welcome to Glory University.");
+
     openPortal();
-
-  } else {
-    const email = $("loginEmail").value.trim().toLowerCase();
-
-    const student = students.find(
-      item => item.email === email && item.password === password
-    );
-
-    if (!student) {
-      notify("Incorrect email or password.");
-      return;
-    }
-
-    currentUser = student;
-    saveData("guCurrentUser", currentUser);
-
-    notify("Welcome back!");
-    openPortal();
-  }
 });
 
-// ======================================
-// PORTAL NAVIGATION
-// ======================================
+// STUDENT LOGIN
 
-function openPortal() {
-  if (!currentUser) return;
+getElement("login-form").addEventListener("submit", function(event) {
 
-  $("homePage").classList.add("hidden");
-  $("authPage").classList.add("hidden");
-  $("portalPage").classList.remove("hidden");
+    event.preventDefault();
 
-  $("currentDate").textContent =
-    new Date().toLocaleDateString("en-GB", {
-      day:"numeric",
-      month:"short",
-      year:"numeric"
+    const email = getElement("login-email").value.trim().toLowerCase();
+    const password = getElement("login-password").value;
+
+    const students = JSON.parse(localStorage.getItem("gloryStudents")) || [];
+
+    const student = students.find(function(item) {
+        return item.email === email && item.password === password;
     });
 
-  updateStudentInfo();
-  showPortalPage("dashboard");
-  window.scrollTo(0,0);
-}
+    if (!student) {
+        alert("Incorrect email or password. Please try again.");
+        return;
+    }
 
-function showPortalPage(page) {
-  document.querySelectorAll(".portal-view").forEach(section => {
-    section.classList.add("hidden");
-  });
+    currentStudent = student;
 
-  $("view-" + page).classList.remove("hidden");
+    registeredCourses = student.courses || [];
 
-  document.querySelectorAll(".side-link").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.page === page
-    );
-  });
+    studentPhoto = student.photo || "";
 
-  const headings = {
-    dashboard:"Overview",
-    courses:"Course Registration",
-    results:"Results & GPA",
-    notices:"Announcements",
-    calendar:"Academic Calendar",
-    profile:"My Profile",
-    idcard:"Student ID Card"
-  };
+    alert("Login successful!");
 
-  $("pageHeading").textContent = headings[page] || "Student Portal";
-
-  if (page === "dashboard") renderDashboard();
-  if (page === "courses") renderCourses();
-  if (page === "results") renderResults();
-  if (page === "notices") renderAnnouncements("allNotices");
-  if (page === "calendar") renderCalendar("allCalendar");
-  if (page === "profile") renderProfile();
-  if (page === "idcard") renderIDCard();
-
-  $("sidebar").classList.remove("open");
-}
-
-function logout() {
-  currentUser = null;
-  saveData("guCurrentUser", null);
-  notify("You have signed out.");
-  showHome();
-}
-
-// ======================================
-// STUDENT INFORMATION
-// ======================================
-
-function updateStudentInfo() {
-  const name = currentUser.name;
-  const initialsText = initials(name);
-
-  $("sideName").textContent = name;
-  $("sideMatric").textContent = currentUser.matric;
-  $("sideAvatar").textContent = initialsText;
-  $("headerAvatar").textContent = initialsText;
-
-  if (currentUser.photo) {
-    $("sideAvatar").innerHTML =
-      `<img src="${currentUser.photo}" alt="Profile">`;
-    $("headerAvatar").innerHTML =
-      `<img src="${currentUser.photo}" alt="Profile">`;
-  }
-}
-
-function renderDashboard() {
-  const selected = currentUser.selectedCourses || [];
-
-  $("welcomeName").textContent = currentUser.name.split(" ")[0];
-  $("dashMatric").textContent = currentUser.matric;
-  $("dashLevel").textContent = currentUser.level;
-  $("dashCourses").textContent = selected.length;
-
-  $("dashGpa").textContent = calculateGPA().toFixed(2);
-
-  $("academicInfo").innerHTML = `
-    <div><span>Full Name</span><strong>${escapeHTML(currentUser.name)}</strong></div>
-    <div><span>Email Address</span><strong>${escapeHTML(currentUser.email)}</strong></div>
-    <div><span>Department</span><strong>${escapeHTML(currentUser.department)}</strong></div>
-    <div><span>Academic Level</span><strong>${escapeHTML(currentUser.level)}</strong></div>
-    <div><span>Matric Number</span><strong>${escapeHTML(currentUser.matric)}</strong></div>
-    <div><span>Academic Session</span><strong>2026/2027</strong></div>
-  `;
-
-  $("dashboardNotices").innerHTML = announcements.slice(0,2).map(item => `
-    <div class="announcement-item">
-      <h3>${item.title}</h3>
-      <small>${item.date}</small>
-      <p>${item.text}</p>
-    </div>
-  `).join("");
-}
-
-// Escape user-supplied text before placing it in HTML.
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, character => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  })[character]);
-}
-
-// ======================================
-// COURSE REGISTRATION
-// ======================================
-
-function renderCourses() {
-  const selected = currentUser.selectedCourses || [];
-
-  $("courseOptions").innerHTML = courses.map(course => `
-    <div class="course-option">
-      <label>
-        <input type="checkbox"
-          value="${course.code}"
-          ${selected.includes(course.code) ? "checked" : ""}
-          onchange="updateTotalUnits()">
-        <span><strong>${course.code}</strong> — ${course.title}</span>
-      </label>
-      <small>${course.units} Units</small>
-    </div>
-  `).join("");
-
-  updateTotalUnits();
-  renderRegisteredCourses();
-}
-
-function updateTotalUnits() {
-  const selected = [...document.querySelectorAll(
-    "#courseOptions input:checked"
-  )].map(input => input.value);
-
-  const total = courses
-    .filter(course => selected.includes(course.code))
-    .reduce((sum,course) => sum + course.units,0);
-
-  $("totalUnits").textContent = total;
-}
-
-function saveCourses() {
-  const selected = [...document.querySelectorAll(
-    "#courseOptions input:checked"
-  )].map(input => input.value);
-
-  const total = courses
-    .filter(course => selected.includes(course.code))
-    .reduce((sum,course) => sum + course.units,0);
-
-  if (selected.length === 0) {
-    notify("Please select at least one course.");
-    return;
-  }
-
-  if (total > 24) {
-    notify("Maximum allowed demonstration units: 24.");
-    return;
-  }
-
-  currentUser.selectedCourses = selected;
-  updateCurrentStudent();
-
-  $("courseMessage").textContent =
-    "Your course registration has been saved successfully.";
-
-  renderRegisteredCourses();
-  notify("Courses saved successfully!");
-}
-
-function renderRegisteredCourses() {
-  const selected = currentUser.selectedCourses || [];
-
-  const registered = courses.filter(course =>
-    selected.includes(course.code)
-  );
-
-  $("registeredCourses").innerHTML = registered.length
-    ? registered.map(course => `
-      <div class="course-option">
-        <span><strong>${course.code}</strong> — ${course.title}</span>
-        <small>${course.units} Units</small>
-      </div>
-    `).join("")
-    : "<p class='small-note'>You have not registered any courses yet.</p>";
-}
-
-// ======================================
-// RESULTS AND GPA
-// ======================================
-
-// Illustrative sample results. Replace with official results
-// from a properly secured university database in a real system.
-
-const sampleResults = [
-  {code:"CSC 201",title:"Computer Science",units:3,score:82},
-  {code:"CSC 203",title:"Data Structures",units:3,score:75},
-  {code:"MTH 201",title:"Mathematical Methods",units:3,score:68},
-  {code:"GST 201",title:"Communication in English",units:2,score:72},
-  {code:"IFT 201",title:"Information Technology",units:2,score:60}
-];
-
-function getGrade(score) {
-  if (score >= 70) return {grade:"A",point:5};
-  if (score >= 60) return {grade:"B",point:4};
-  if (score >= 50) return {grade:"C",point:3};
-  if (score >= 45) return {grade:"D",point:2};
-  if (score >= 40) return {grade:"E",point:1};
-  return {grade:"F",point:0};
-}
-
-function calculateGPA() {
-  let totalPoints = 0;
-  let totalUnits = 0;
-
-  sampleResults.forEach(result => {
-    const grade = getGrade(result.score);
-    totalPoints += grade.point * result.units;
-    totalUnits += result.units;
-  });
-
-  return totalUnits ? totalPoints / totalUnits : 0;
-}
-
-function renderResults() {
-  $("resultsBody").innerHTML = sampleResults.map(result => {
-    const grade = getGrade(result.score);
-
-    return `
-      <tr>
-        <td>${result.code}</td>
-        <td>${result.title}</td>
-        <td>${result.units}</td>
-        <td>${result.score}</td>
-        <td>${grade.grade}</td>
-        <td>${grade.point}</td>
-      </tr>
-    `;
-  }).join("");
-
-  $("gpaResult").textContent =
-    calculateGPA().toFixed(2) + " / 5.00";
-}
-
-// ======================================
-// ANNOUNCEMENTS
-// ======================================
-
-function renderAnnouncements(elementId) {
-  $(elementId).innerHTML = announcements.map(item => `
-    <article class="announcement-item">
-      <small>${item.date}</small>
-      <h3>${item.title}</h3>
-      <p>${item.text}</p>
-    </article>
-  `).join("");
-}
-
-// ======================================
-// ACADEMIC CALENDAR
-// ======================================
-
-function renderCalendar(elementId) {
-  $(elementId).innerHTML = events.map(item => `
-    <article class="calendar-item">
-      <div class="calendar-date">📅<br>${item.date.split(" ")[1] || ""}</div>
-      <div>
-        <small>${item.date}</small>
-        <h3>${item.title}</h3>
-        <p>${item.text}</p>
-      </div>
-    </article>
-  `).join("");
-}
-
-// ======================================
-// PROFILE MANAGEMENT
-// ======================================
-
-function renderProfile() {
-  $("profileName").value = currentUser.name;
-  $("profileEmail").value = currentUser.email;
-  $("profileDepartment").value = currentUser.department;
-  $("profileLevel").value = currentUser.level;
-  $("profileMatric").value = currentUser.matric;
-
-  $("profileAvatar").textContent = initials(currentUser.name);
-
-  if (currentUser.photo) {
-    $("profileAvatar").innerHTML =
-      `<img src="${currentUser.photo}" alt="Student profile">`;
-  }
-}
-
-$("profileForm").addEventListener("submit", event => {
-  event.preventDefault();
-
-  const name = $("profileName").value.trim();
-  const email = $("profileEmail").value.trim().toLowerCase();
-
-  if (!name || !email) {
-    notify("Please complete your profile.");
-    return;
-  }
-
-  const students = getData("guStudents", []);
-
-  const emailUsed = students.some(student =>
-    student.email === email &&
-    student.matric !== currentUser.matric
-  );
-
-  if (emailUsed) {
-    notify("That email address is already in use.");
-    return;
-  }
-
-  currentUser.name = name;
-  currentUser.email = email;
-  currentUser.level = $("profileLevel").value;
-
-  updateCurrentStudent();
-  updateStudentInfo();
-  renderProfile();
-
-  $("profileMessage").textContent =
-    "Your profile has been updated.";
-
-  notify("Profile updated successfully!");
+    openPortal();
 });
 
-function updateCurrentStudent() {
-  const students = getData("guStudents", []);
+// OPEN STUDENT PORTAL
 
-  const index = students.findIndex(student =>
-    student.matric === currentUser.matric
-  );
+function openPortal() {
 
-  if (index !== -1) {
-    students[index] = currentUser;
-    saveData("guStudents", students);
-  }
+    if (!currentStudent) return;
 
-  saveData("guCurrentUser", currentUser);
+    getElement("home").classList.add("hidden");
+    getElement("auth-section").classList.add("hidden");
+    getElement("portal-section").classList.remove("hidden");
+
+    document.querySelector(".header").classList.add("hidden");
+    document.querySelector(".footer").classList.add("hidden");
+
+    updateStudentInformation();
+
+    showPortalPage("dashboard");
+
+    updateDashboard();
+
+    window.scrollTo(0, 0);
 }
 
-// ======================================
-// PROFILE PHOTO UPLOAD
-// ======================================
+// UPDATE STUDENT INFORMATION
 
-function uploadPhoto(event) {
-  const file = event.target.files[0];
+function updateStudentInformation() {
 
-  if (!file) return;
+    if (!currentStudent) return;
 
-  if (!file.type.startsWith("image/")) {
-    notify("Please select an image.");
-    return;
-  }
+    const name = currentStudent.name;
+    const initials = name.split(" ")
+        .filter(Boolean)
+        .map(word => word[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
 
-  if (file.size > 1024 * 1024) {
-    notify("Please choose an image smaller than 1MB.");
-    return;
-  }
+    getElement("sidebar-name").textContent = name;
+    getElement("welcome-name").textContent = "Hello, " + name;
+    getElement("header-student-name").textContent = name;
 
-  const reader = new FileReader();
+    getElement("sidebar-avatar").textContent = initials;
+    getElement("header-avatar").textContent = initials;
 
-  reader.onload = () => {
-    currentUser.photo = reader.result;
-    updateCurrentStudent();
-    updateStudentInfo();
-    renderProfile();
-    notify("Profile photo updated!");
-  };
+    getElement("profile-name").value = name;
+    getElement("profile-email").value = currentStudent.email;
+    getElement("profile-department").value = currentStudent.department;
+    getElement("profile-level").value = currentStudent.level || "300 Level";
 
-  reader.readAsDataURL(file);
+    getElement("id-name").textContent = name;
+    getElement("id-department").textContent = currentStudent.department;
+    getElement("id-number").textContent = currentStudent.id;
+    getElement("id-level").textContent = currentStudent.level || "300 Level";
+
+    if (studentPhoto) {
+
+        getElement("sidebar-avatar").innerHTML =
+            `<img src="${studentPhoto}" alt="Student photo">`;
+
+        getElement("header-avatar").innerHTML =
+            `<img src="${studentPhoto}" alt="Student photo">`;
+
+        getElement("id-photo").innerHTML =
+            `<img src="${studentPhoto}" alt="Student photo">`;
+
+    } else {
+
+        getElement("id-photo").textContent = initials;
+    }
 }
 
-// ======================================
-// DIGITAL STUDENT ID CARD
-// ======================================
+// SHOW DIFFERENT PORTAL PAGES
 
-function renderIDCard() {
-  const name = currentUser.name;
+function showPortalPage(page, button = null) {
 
-  $("idName").textContent = name;
-  $("idMatric").textContent = currentUser.matric;
-  $("idDepartment").textContent = currentUser.department;
-  $("idLevel").textContent = currentUser.level;
+    const pages = document.querySelectorAll(".portal-page");
 
-  $("idPhoto").textContent = initials(name);
+    pages.forEach(function(item) {
+        item.classList.add("hidden");
+    });
 
-  if (currentUser.photo) {
-    $("idPhoto").innerHTML =
-      `<img src="${currentUser.photo}" alt="Student photo">`;
-  }
+    const selectedPage = getElement(page);
+
+    if (!selectedPage) return;
+
+    selectedPage.classList.remove("hidden");
+
+    const pageNames = {
+        "dashboard": "Student Dashboard",
+        "courses": "Course Registration",
+        "results": "Academic Results",
+        "announcements": "Announcements",
+        "calendar-page": "Academic Calendar",
+        "profile": "My Profile",
+        "student-id": "Student Identity Card"
+    };
+
+    getElement("portal-heading").textContent = pageNames[page] || "Student Portal";
+
+    document.querySelectorAll(".sidebar-link").forEach(function(link) {
+        link.classList.remove("active");
+    });
+
+    if (button && button.classList.contains("sidebar-link")) {
+        button.classList.add("active");
+    } else {
+        document.querySelectorAll(".sidebar-link").forEach(function(link) {
+            if (link.getAttribute("onclick")?.includes("'" + page + "'")) {
+                link.classList.add("active");
+            }
+        });
+    }
+
+    if (page === "profile" || page === "student-id") {
+        updateStudentInformation();
+    }
 }
 
-// ======================================
-// HOMEPAGE CONTENT
-// ======================================
+// COURSE CREDIT UNIT CALCULATOR
 
-function renderPublicContent() {
-  renderAnnouncements("publicAnnouncements");
-  renderCalendar("publicCalendar");
+const courseCheckboxes = document.querySelectorAll(
+    '#course-list input[type="checkbox"]'
+);
+
+courseCheckboxes.forEach(function(checkbox) {
+
+    checkbox.addEventListener("change", calculateUnits);
+
+});
+
+function calculateUnits() {
+
+    let total = 0;
+
+    courseCheckboxes.forEach(function(checkbox) {
+
+        if (checkbox.checked) {
+            total += Number(checkbox.dataset.unit);
+        }
+
+    });
+
+    getElement("total-units").textContent = total;
 }
 
-// ======================================
-// INITIALIZATION
-// ======================================
+// SAVE COURSE REGISTRATION
 
-renderPublicContent();
+function registerCourses() {
 
-if (currentUser) {
-  const students = getData("guStudents", []);
-  const savedStudent = students.find(student =>
-    student.matric === currentUser.matric
-  );
+    if (!currentStudent) return;
 
-  if (savedStudent) {
-    currentUser = savedStudent;
-    saveData("guCurrentUser", currentUser);
-    openPortal();
-  } else {
-    currentUser = null;
-    saveData("guCurrentUser", null);
-  }
+    registeredCourses = [];
+
+    courseCheckboxes.forEach(function(checkbox) {
+
+        if (checkbox.checked) {
+
+            registeredCourses.push({
+                code: checkbox.value,
+                units: Number(checkbox.dataset.unit)
+            });
+
+        }
+
+    });
+
+    if (registeredCourses.length === 0) {
+        alert("Please select at least one course.");
+        return;
+    }
+
+    currentStudent.courses = registeredCourses;
+
+    saveCurrentStudent();
+
+    updateDashboard();
+
+    alert("Your courses have been registered successfully!");
 }
+
+// UPDATE DASHBOARD
+
+function updateDashboard() {
+
+    if (!currentStudent) return;
+
+    getElement("dashboard-courses").textContent = registeredCourses.length;
+
+    let totalUnits = 0;
+
+    registeredCourses.forEach(function(course) {
+        totalUnits += Number(course.units);
+    });
+
+    getElement("dashboard-units").textContent = totalUnits;
+
+    // Demonstration GPA, not an actual calculated academic result.
+    getElement("dashboard-gpa").textContent = "4.50";
+
+    const announcementContainer = getElement("dashboard-announcements");
+
+    announcementContainer.innerHTML = "";
+
+    announcements.slice(0, 2).forEach(function(item) {
+
+        const announcement = document.createElement("div");
+
+        announcement.className = "announcement-item";
+
+        const icon = document.createElement("span");
+        icon.textContent = "📢";
+
+        const content = document.createElement("div");
+
+        const title = document.createElement("h4");
+        title.textContent = item.title;
+
+        const message = document.createElement("p");
+        message.textContent = item.message;
+
+        content.appendChild(title);
+        content.appendChild(message);
+
+        announcement.appendChild(icon);
+        announcement.appendChild(content);
+
+        announcementContainer.appendChild(announcement);
+
+    });
+}
+
+// SAVE PROFILE CHANGES
+
+getElement("profile-form").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    if (!currentStudent) return;
+
+    currentStudent.name = getElement("profile-name").value.trim();
+
+    currentStudent.department = getElement("profile-department").value.trim();
+
+    currentStudent.level = getElement("profile-level").value;
+
+    saveCurrentStudent();
+
+    updateStudentInformation();
+
+    updateDashboard();
+
+    alert("Your profile has been updated successfully!");
+
+});
+
+// UPLOAD PROFILE PICTURE
+
+getElement("profile-photo").addEventListener("change", function(event) {
+
+    if (!currentStudent) return;
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("Please select an image file.");
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        alert("Please select an image smaller than 2MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        studentPhoto = e.target.result;
+
+        currentStudent.photo = studentPhoto;
+
+        saveCurrentStudent();
+
+        updateStudentInformation();
+
+        alert("Profile picture updated!");
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+// SAVE UPDATED STUDENT DATA
+
+function saveCurrentStudent() {
+
+    if (!currentStudent) return;
+
+    const students = JSON.parse(localStorage.getItem("gloryStudents")) || [];
+
+    const index = students.findIndex(function(student) {
+        return student.id === currentStudent.id;
+    });
+
+    if (index !== -1) {
+
+        students[index] = currentStudent;
+
+        localStorage.setItem("gloryStudents", JSON.stringify(students));
+
+    }
+}
+
+// LOGOUT
+
+function logout() {
+
+    const confirmLogout = confirm("Are you sure you want to log out?");
+
+    if (!confirmLogout) return;
+
+    currentStudent = null;
+
+    registeredCourses = [];
+
+    studentPhoto = "";
+
+    getElement("login-form").reset();
+
+    getElement("register-form").reset();
+
+    showHome();
+
+    alert("You have successfully logged out.");
+
+}
+
+// INITIAL PAGE SETUP
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    showHome();
+
+});

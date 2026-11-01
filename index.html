@@ -2,309 +2,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Glory University - Excellence in Education">
-  <title>Glory University | Learning for Excellence</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Glory University - Building Minds. Shaping the Future.">
+    <title>Glory University</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="navbar">
-  <a href="#" class="brand" onclick="showHome()">
-    <div class="crest">GU</div>
-    <div>
-      <strong>GLORY UNIVERSITY</strong>
-      <small>KNOWLEDGE • CHARACTER • EXCELLENCE</small>
-    </div>
-  </a>
+    <!-- NAVIGATION -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">GLORY <span>UNIVERSITY</span></a>
 
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#faculties">Faculties</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
 
-  <nav id="navLinks">
-    <a href="#home" onclick="showHome()">Home</a>
-    <a href="#about" onclick="showHome()">About</a>
-    <a href="#faculties" onclick="showHome()">Faculties</a>
-    <a href="#announcements" onclick="showHome()">News</a>
-    <button class="nav-login" onclick="openAuth('login')">Student Login</button>
-  </nav>
-</header>
-
-<!-- HOMEPAGE -->
-<main id="homePage">
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <span class="eyebrow">WELCOME TO GLORY UNIVERSITY</span>
-      <h1>Building Minds.<br><span>Shaping Futures.</span></h1>
-      <p>Discover your potential in a community committed to academic excellence, innovation and leadership.</p>
-      <div class="hero-actions">
-        <button class="primary-btn" onclick="openAuth('register')">Apply for Admission →</button>
-        <button class="outline-btn" onclick="document.querySelector('#about').scrollIntoView({behavior:'smooth'})">Explore University</button>
-      </div>
-      <div class="hero-note">A place to learn, grow and achieve greatness.</div>
-    </div>
-    <div class="hero-image">
-      <div class="image-label">
-        <strong>Knowledge is Power</strong>
-        <span>Your future begins here.</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="stats">
-    <div><strong>20+</strong><span>Academic Programmes</span></div>
-    <div><strong>5</strong><span>Faculties</span></div>
-    <div><strong>100%</strong><span>Commitment to Excellence</span></div>
-    <div><strong>∞</strong><span>Opportunities</span></div>
-  </section>
-
-  <section class="section about-section" id="about">
-    <div class="section-heading">
-      <span class="eyebrow">WHO WE ARE</span>
-      <h2>Welcome to Glory University</h2>
-      <p>Education that inspires. Knowledge that transforms.</p>
-    </div>
-    <div class="about-grid">
-      <div class="about-image"></div>
-      <div class="about-text">
-        <h3>More than a university.</h3>
-        <p>Glory University is dedicated to providing an environment where students can develop their intellectual abilities, discover their talents and prepare for meaningful careers.</p>
-        <p>We believe that quality education combines academic knowledge, practical skills, creativity and good character.</p>
-        <div class="value-list">
-          <span>✓ Academic Excellence</span>
-          <span>✓ Innovation and Creativity</span>
-          <span>✓ Leadership and Integrity</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section faculties-section" id="faculties">
-    <div class="section-heading">
-      <span class="eyebrow">EXPLORE YOUR OPTIONS</span>
-      <h2>Our Faculties</h2>
-      <p>Find the path that matches your ambitions.</p>
-    </div>
-    <div class="faculty-grid">
-      <article class="faculty-card"><div>💻</div><h3>Computing</h3><p>Computer Science, Information Technology and Software Engineering.</p></article>
-      <article class="faculty-card"><div>📊</div><h3>Management Sciences</h3><p>Business Administration, Accounting and Economics.</p></article>
-      <article class="faculty-card"><div>🔬</div><h3>Natural Sciences</h3><p>Biological Sciences, Chemistry and Mathematics.</p></article>
-      <article class="faculty-card"><div>⚖️</div><h3>Social Sciences</h3><p>Political Science, Sociology and Psychology.</p></article>
-      <article class="faculty-card"><div>📚</div><h3>Arts and Humanities</h3><p>Languages, History and Communication.</p></article>
-    </div>
-  </section>
-
-  <section class="section announcement-section" id="announcements">
-    <div class="section-heading">
-      <span class="eyebrow">CAMPUS UPDATES</span>
-      <h2>Latest Announcements</h2>
-    </div>
-    <div id="publicAnnouncements" class="announcement-list"></div>
-  </section>
-
-  <section class="section calendar-section">
-    <div class="section-heading">
-      <span class="eyebrow">PLAN AHEAD</span>
-      <h2>Academic Calendar</h2>
-    </div>
-    <div id="publicCalendar" class="calendar-list"></div>
-  </section>
-
-  <section class="cta-section">
-    <span class="eyebrow">YOUR JOURNEY STARTS HERE</span>
-    <h2>Ready to become part of something great?</h2>
-    <p>Take the next step towards your future.</p>
-    <button class="primary-btn" onclick="openAuth('register')">Join Glory University →</button>
-  </section>
-</main>
-
-<!-- AUTHENTICATION -->
-<section id="authPage" class="auth-page hidden">
-  <div class="auth-card">
-    <button class="back-link" onclick="showHome()">← Back to homepage</button>
-    <div class="auth-logo crest">GU</div>
-    <h2 id="authTitle">Student Login</h2>
-    <p id="authDescription">Welcome back. Sign in to your student account.</p>
-
-    <form id="authForm">
-      <div id="registerFields" class="hidden">
-        <label>Full name</label>
-        <input id="fullName" placeholder="Enter your full name">
-        <label>Department</label>
-        <select id="department">
-          <option value="">Select department</option>
-          <option>Computer Science</option>
-          <option>Information Technology</option>
-          <option>Software Engineering</option>
-          <option>Business Administration</option>
-          <option>Accounting</option>
-          <option>Biological Sciences</option>
-          <option>Economics</option>
-          <option>Political Science</option>
-        </select>
-        <label>Academic level</label>
-        <select id="level">
-          <option value="">Select level</option>
-          <option>100 Level</option>
-          <option>200 Level</option>
-          <option>300 Level</option>
-          <option>400 Level</option>
-          <option>500 Level</option>
-        </select>
-        <label>Email address</label>
-        <input id="registerEmail" type="email" placeholder="student@email.com">
-      </div>
-
-      <div id="loginFields">
-        <label>Email address</label>
-        <input id="loginEmail" type="email" placeholder="Enter your email">
-      </div>
-
-      <label>Password</label>
-      <div class="password-wrap">
-        <input id="password" type="password" placeholder="Enter password">
-        <button type="button" onclick="togglePassword()">Show</button>
-      </div>
-
-      <button type="submit" class="primary-btn full-btn" id="authSubmit">Sign In</button>
-    </form>
-
-    <p class="auth-switch" id="authSwitch">New student? <a onclick="openAuth('register')">Create an account</a></p>
-    <p class="auth-switch hidden" id="loginSwitch">Already registered? <a onclick="openAuth('login')">Sign in</a></p>
-    <p class="small-note">Demonstration portal — use sample information only.</p>
-  </div>
-</section>
-
-<!-- STUDENT PORTAL -->
-<section id="portalPage" class="portal hidden">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand"><div class="crest">GU</div><strong>GLORY UNIVERSITY</strong></div>
-    <div class="sidebar-user">
-      <div class="avatar" id="sideAvatar">GU</div>
-      <div><strong id="sideName">Student</strong><small id="sideMatric">GU/2026/0001</small></div>
-    </div>
-    <nav class="side-nav">
-      <button class="side-link active" data-page="dashboard" onclick="showPortalPage('dashboard')">▦ Overview</button>
-      <button class="side-link" data-page="courses" onclick="showPortalPage('courses')">▤ Course Registration</button>
-      <button class="side-link" data-page="results" onclick="showPortalPage('results')">▧ Results & GPA</button>
-      <button class="side-link" data-page="notices" onclick="showPortalPage('notices')">◉ Announcements</button>
-      <button class="side-link" data-page="calendar" onclick="showPortalPage('calendar')">▦ Academic Calendar</button>
-      <button class="side-link" data-page="profile" onclick="showPortalPage('profile')">♙ My Profile</button>
-      <button class="side-link" data-page="idcard" onclick="showPortalPage('idcard')">▣ Student ID Card</button>
-    </nav>
-    <button class="logout-btn" onclick="logout()">↪ Sign Out</button>
-  </aside>
-
-  <div class="portal-main">
-    <header class="portal-header">
-      <button class="menu-toggle portal-menu" onclick="toggleSidebar()">☰</button>
-      <div><span class="eyebrow">STUDENT PORTAL</span><h2 id="pageHeading">Overview</h2></div>
-      <div class="header-right"><span id="currentDate"></span><div class="avatar small-avatar" id="headerAvatar">GU</div></div>
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="showAuth('login')">Login</button>
+                <button class="btn btn-primary" onclick="showAuth('register')">Apply Now</button>
+            </div>
+        </nav>
     </header>
 
-    <div class="portal-content">
+    <!-- HOMEPAGE -->
+    <main id="home">
 
-      <section class="portal-view" id="view-dashboard">
-        <div class="welcome-panel">
-          <div><span class="eyebrow">YOUR ACADEMIC SPACE</span><h1>Welcome, <span id="welcomeName">Student</span>!</h1><p>Here's an overview of your academic journey.</p></div>
-          <div class="welcome-icon">🎓</div>
-        </div>
-        <div class="summary-grid">
-          <article class="summary-card"><span>Matric Number</span><strong id="dashMatric">—</strong><small>Student identification</small></article>
-          <article class="summary-card"><span>Academic Level</span><strong id="dashLevel">—</strong><small>Current level</small></article>
-          <article class="summary-card"><span>Registered Courses</span><strong id="dashCourses">0</strong><small>Current semester</small></article>
-          <article class="summary-card"><span>Current GPA</span><strong id="dashGpa">0.00</strong><small>Grade point average</small></article>
-        </div>
-        <div class="dashboard-grid">
-          <article class="content-card">
-            <div class="card-heading"><h3>Quick Actions</h3></div>
-            <div class="quick-actions">
-              <button onclick="showPortalPage('courses')">📚 <span>Register Courses</span></button>
-              <button onclick="showPortalPage('results')">📊 <span>Check Results</span></button>
-              <button onclick="showPortalPage('profile')">👤 <span>My Profile</span></button>
-              <button onclick="showPortalPage('idcard')">🪪 <span>Student ID</span></button>
+        <section class="hero">
+            <div class="hero-content">
+                <p class="eyebrow">WELCOME TO GLORY UNIVERSITY</p>
+
+                <h1>Building Minds.<br>
+                    <span>Shaping the Future.</span>
+                </h1>
+
+                <p>
+                    Discover your potential, develop your talents and prepare
+                    for a future filled with opportunities at Glory University.
+                </p>
+
+                <div class="hero-buttons">
+                    <button class="btn btn-primary"
+                        onclick="showAuth('register')">Apply Now</button>
+
+                    <a href="#about" class="btn btn-outline">Explore More</a>
+                </div>
             </div>
-          </article>
-          <article class="content-card">
-            <div class="card-heading"><h3>Latest Announcements</h3><button class="text-btn" onclick="showPortalPage('notices')">View all</button></div>
-            <div id="dashboardNotices"></div>
-          </article>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="section">
+            <div class="section-heading">
+                <p class="eyebrow">WHO WE ARE</p>
+                <h2>About Glory University</h2>
+            </div>
+
+            <div class="about-content">
+                <div>
+                    <h3>Education Beyond Boundaries</h3>
+                    <p>
+                        Glory University is committed to providing quality
+                        education, encouraging innovation and developing
+                        responsible future leaders.
+                    </p>
+                    <p>
+                        Through academic excellence, practical learning and
+                        personal development, we prepare our students to make
+                        meaningful contributions to society.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3>Our Mission</h3>
+                    <p>
+                        To provide an environment where knowledge, creativity
+                        and integrity thrive.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FACULTIES -->
+        <section id="faculties" class="section faculties-section">
+            <div class="section-heading">
+                <p class="eyebrow">ACADEMIC EXCELLENCE</p>
+                <h2>Explore Our Faculties</h2>
+                <p>Discover programmes designed to prepare you for tomorrow.</p>
+            </div>
+
+            <div class="faculty-grid">
+                <div class="faculty-card">
+                    <span>💻</span>
+                    <h3>Computing</h3>
+                    <p>Technology, software development and innovation.</p>
+                </div>
+
+                <div class="faculty-card">
+                    <span>📊</span>
+                    <h3>Management Sciences</h3>
+                    <p>Business, leadership and entrepreneurship.</p>
+                </div>
+
+                <div class="faculty-card">
+                    <span>🔬</span>
+                    <h3>Natural Sciences</h3>
+                    <p>Scientific discovery and research.</p>
+                </div>
+
+                <div class="faculty-card">
+                    <span>⚖️</span>
+                    <h3>Law</h3>
+                    <p>Justice, legal studies and professional ethics.</p>
+                </div>
+
+                <div class="faculty-card">
+                    <span>📚</span>
+                    <h3>Arts and Humanities</h3>
+                    <p>Culture, communication and creative thinking.</p>
+                </div>
+
+                <div class="faculty-card">
+                    <span>🏥</span>
+                    <h3>Health Sciences</h3>
+                    <p>Healthcare, wellbeing and medical research.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEWS -->
+        <section id="news" class="section">
+            <div class="section-heading">
+                <p class="eyebrow">CAMPUS UPDATES</p>
+                <h2>Latest News and Announcements</h2>
+            </div>
+
+            <div class="news-grid">
+                <article class="news-card">
+                    <div class="news-image">🎓</div>
+                    <div class="news-content">
+                        <p class="news-date">UNIVERSITY NEWS</p>
+                        <h3>Welcome to Glory University</h3>
+                        <p>Discover our academic community and student experience.</p>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <div class="news-image">📅</div>
+                    <div class="news-content">
+                        <p class="news-date">ACADEMIC UPDATES</p>
+                        <h3>Academic Calendar</h3>
+                        <p>Stay informed about important academic activities.</p>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <div class="news-image">💡</div>
+                    <div class="news-content">
+                        <p class="news-date">STUDENT LIFE</p>
+                        <h3>Explore Campus Life</h3>
+                        <p>Get involved in activities and opportunities on campus.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- CALENDAR -->
+        <section id="calendar" class="section calendar-section">
+            <div class="section-heading">
+                <p class="eyebrow">IMPORTANT DATES</p>
+                <h2>Academic Calendar</h2>
+            </div>
+
+            <div class="calendar-list">
+                <div class="calendar-item">
+                    <strong>01</strong>
+                    <div>
+                        <h3>Registration</h3>
+                        <p>Student registration and course selection.</p>
+                    </div>
+                </div>
+
+                <div class="calendar-item">
+                    <strong>02</strong>
+                    <div>
+                        <h3>Lectures Begin</h3>
+                        <p>Start of academic activities.</p>
+                    </div>
+                </div>
+
+                <div class="calendar-item">
+                    <strong>03</strong>
+                    <div>
+                        <h3>Examinations</h3>
+                        <p>End-of-semester examinations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section contact-section">
+            <div class="section-heading">
+                <p class="eyebrow">GET IN TOUCH</p>
+                <h2>Contact Glory University</h2>
+                <p>We would love to hear from you.</p>
+            </div>
+
+            <div class="contact-content">
+                <div>
+                    <h3>Glory University</h3>
+                    <p>Email: info@gloryuniversity.edu</p>
+                    <p>Phone: +234 800 000 0000</p>
+                    <p>Address: Nigeria</p>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="showAuth('register')">Become a Student</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- AUTHENTICATION -->
+    <section id="auth-section" class="auth-section hidden">
+        <div class="auth-container">
+            <button class="close-btn" onclick="showHome()">✕</button>
+
+            <div class="auth-logo">
+                GLORY <span>UNIVERSITY</span>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form">
+                <h2>Welcome Back</h2>
+                <p>Log in to access your student portal.</p>
+
+                <label for="login-email">Email Address</label>
+                <input type="email" id="login-email"
+                    placeholder="Enter your email" required>
+
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password"
+                    placeholder="Enter your password" required>
+
+                <button type="submit" class="btn btn-primary full-width">
+                    Login
+                </button>
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <a href="#" onclick="showAuth('register'); return false;">Register</a>
+                </p>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="register-form" class="hidden">
+                <h2>Create an Account</h2>
+                <p>Join the Glory University community.</p>
+
+                <label for="register-name">Full Name</label>
+                <input type="text" id="register-name"
+                    placeholder="Enter your full name" required>
+
+                <label for="register-email">Email Address</label>
+                <input type="email" id="register-email"
+                    placeholder="Enter your email" required>
+
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password"
+                    placeholder="Create a password" required>
+
+                <label for="register-department">Department</label>
+                <select id="register-department" required>
+                    <option value="">Select Department</option>
+                    <option>Computer Science</option>
+                    <option>Software Engineering</option>
+                    <option>Information Technology</option>
+                    <option>Business Administration</option>
+                    <option>Natural Sciences</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary full-width">
+                    Create Account
+                </button>
+
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="#" onclick="showAuth('login'); return false;">Login</a>
+                </p>
+            </form>
         </div>
-        <article class="content-card"><div class="card-heading"><h3>My Academic Information</h3></div><div id="academicInfo" class="info-grid"></div></article>
-      </section>
+    </section>
 
-      <section class="portal-view hidden" id="view-courses">
-        <div class="section-heading left-heading"><span class="eyebrow">ACADEMIC SERVICES</span><h2>Course Registration</h2><p>Select your courses for the current semester.</p></div>
-        <article class="content-card">
-          <div class="card-heading"><h3>Available Courses</h3><span class="tag">2026/2027 Session</span></div>
-          <div id="courseOptions" class="course-options"></div>
-          <div class="course-total"><span>Total credit units selected</span><strong id="totalUnits">0</strong></div>
-          <button class="primary-btn" onclick="saveCourses()">Save Course Registration</button>
-          <p id="courseMessage" class="form-message"></p>
-        </article>
-        <article class="content-card"><h3>My Registered Courses</h3><div id="registeredCourses"></div></article>
-      </section>
+    <!-- STUDENT PORTAL -->
+    <section id="portal-section" class="portal-section hidden">
 
-      <section class="portal-view hidden" id="view-results">
-        <div class="section-heading left-heading"><span class="eyebrow">ACADEMIC PERFORMANCE</span><h2>Results & GPA</h2><p>Review your demonstration results and calculate your GPA.</p></div>
-        <article class="content-card">
-          <div class="card-heading"><h3>My Results</h3><span class="tag">Sample data</span></div>
-          <div class="table-scroll"><table><thead><tr><th>Course</th><th>Course Title</th><th>Units</th><th>Score</th><th>Grade</th><th>Points</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
-          <div class="gpa-panel"><div><span>Calculated GPA</span><strong id="gpaResult">0.00 / 5.00</strong></div><p>GPA = Total quality points ÷ Total credit units.</p></div>
-        </article>
-      </section>
+        <aside class="sidebar">
+            <div class="sidebar-logo">GLORY <span>UNIVERSITY</span></div>
 
-      <section class="portal-view hidden" id="view-notices">
-        <div class="section-heading left-heading"><span class="eyebrow">STAY INFORMED</span><h2>Announcements</h2><p>Updates and important information from the university.</p></div>
-        <div id="allNotices" class="announcement-list"></div>
-      </section>
+            <div class="student-sidebar-info">
+                <div class="student-avatar" id="sidebar-avatar">GU</div>
+                <h3 id="sidebar-name">Student Name</h3>
+                <p>Student Portal</p>
+            </div>
 
-      <section class="portal-view hidden" id="view-calendar">
-        <div class="section-heading left-heading"><span class="eyebrow">IMPORTANT DATES</span><h2>Academic Calendar</h2><p>Keep track of your academic activities.</p></div>
-        <div id="allCalendar" class="calendar-list"></div>
-      </section>
+            <nav class="sidebar-nav">
+                <button class="sidebar-link active"
+                    onclick="showPortalPage('dashboard', this)">🏠 Dashboard</button>
 
-      <section class="portal-view hidden" id="view-profile">
-        <div class="section-heading left-heading"><span class="eyebrow">PERSONAL INFORMATION</span><h2>My Profile</h2><p>View and update your student information.</p></div>
-        <article class="content-card profile-card">
-          <div class="profile-avatar" id="profileAvatar">GU</div>
-          <label class="upload-label">Upload profile photo<input type="file" id="photoUpload" accept="image/*" onchange="uploadPhoto(event)"></label>
-          <form id="profileForm">
-            <label>Full name</label><input id="profileName" required>
-            <label>Email address</label><input id="profileEmail" type="email" required>
-            <label>Department</label><input id="profileDepartment" readonly>
-            <label>Academic level</label><select id="profileLevel"><option>100 Level</option><option>200 Level</option><option>300 Level</option><option>400 Level</option><option>500 Level</option></select>
-            <label>Matric number</label><input id="profileMatric" readonly>
-            <button class="primary-btn" type="submit">Update Profile</button>
-          </form>
-          <p id="profileMessage" class="form-message"></p>
-        </article>
-      </section>
+                <button class="sidebar-link"
+                    onclick="showPortalPage('courses', this)">📚 Course Registration</button>
 
-      <section class="portal-view hidden" id="view-idcard">
-        <div class="section-heading left-heading"><span class="eyebrow">UNIVERSITY IDENTIFICATION</span><h2>Student ID Card</h2><p>Your digital university identification card.</p></div>
-        <div class="student-id" id="studentIdCard">
-          <div class="id-top"><div class="crest">GU</div><div><strong>GLORY UNIVERSITY</strong><small>STUDENT IDENTIFICATION CARD</small></div></div>
-          <div class="id-body"><div class="id-photo" id="idPhoto">GU</div><div class="id-details"><h2 id="idName">Student Name</h2><p>MAT NO: <strong id="idMatric">—</strong></p><p>DEPARTMENT: <strong id="idDepartment">—</strong></p><p>LEVEL: <strong id="idLevel">—</strong></p><p>SESSION: <strong>2026/2027</strong></p></div></div>
-          <div class="id-footer">KNOWLEDGE • CHARACTER • EXCELLENCE</div>
+                <button class="sidebar-link"
+                    onclick="showPortalPage('results', this)">📊 Results</button>
+
+                <button class="sidebar-link"
+                    onclick="showPortalPage('announcements', this)">📢 Announcements</button>
+
+                <button class="sidebar-link"
+                    onclick="showPortalPage('calendar-page', this)">📅 Calendar</button>
+
+                <button class="sidebar-link"
+                    onclick="showPortalPage('profile', this)">👤 My Profile</button>
+
+                <button class="sidebar-link"
+                    onclick="showPortalPage('student-id', this)">🪪 Student ID</button>
+            </nav>
+
+            <button class="logout-btn" onclick="logout()">↪ Logout</button>
+        </aside>
+
+        <div class="portal-main">
+            <header class="portal-header">
+                <div>
+                    <p>GLORY UNIVERSITY</p>
+                    <h2 id="portal-heading">Student Dashboard</h2>
+                </div>
+                <div class="portal-header-user">
+                    <span id="header-student-name">Student</span>
+                    <div class="student-avatar small" id="header-avatar">GU</div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="portal-page">
+                <div class="welcome-banner">
+                    <div>
+                        <p>WELCOME BACK!</p>
+                        <h2 id="welcome-name">Hello, Student</h2>
+                        <p>Here is an overview of your academic activities.</p>
+                    </div>
+                    <span>🎓</span>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <p>Registered Courses</p>
+                        <h2 id="dashboard-courses">0</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <p>Total Credit Units</p>
+                        <h2 id="dashboard-units">0</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <p>Current GPA</p>
+                        <h2 id="dashboard-gpa">0.00</h2>
+                    </div>
+                </div>
+
+                <div class="portal-panel">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button onclick="showPortalPage('courses')">
+                            📚 Register Courses
+                        </button>
+                        <button onclick="showPortalPage('results')">
+                            📊 View Results
+                        </button>
+                        <button onclick="showPortalPage('profile')">
+                            👤 Update Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="portal-panel">
+                    <h3>Recent Announcements</h3>
+                    <div id="dashboard-announcements"></div>
+                </div>
+            </div>
+
+            <!-- COURSE REGISTRATION -->
+            <div id="courses" class="portal-page hidden">
+                <div class="portal-panel">
+                    <h3>Course Registration</h3>
+                    <p>Select your courses for the current semester.</p>
+
+                    <div id="course-list">
+                        <label class="course-option">
+                            <input type="checkbox" value="CSC 301" data-unit="3">
+                            CSC 301 - Data Structures (3 Units)
+                        </label>
+
+                        <label class="course-option">
+                            <input type="checkbox" value="CSC 302" data-unit="2">
+                            CSC 302 - Database Systems (2 Units)
+                        </label>
+
+                        <label class="course-option">
+                            <input type="checkbox" value="CSC 303" data-unit="3">
+                            CSC 303 - Software Engineering (3 Units)
+                        </label>
+
+                        <label class="course-option">
+                            <input type="checkbox" value="CSC 304" data-unit="2">
+                            CSC 304 - Computer Networks (2 Units)
+                        </label>
+
+                        <label class="course-option">
+                            <input type="checkbox" value="GST 301" data-unit="2">
+                            GST 301 - Communication Skills (2 Units)
+                        </label>
+
+                        <label class="course-option">
+                            <input type="checkbox" value="IFT 301" data-unit="3">
+                            IFT 301 - Web Development (3 Units)
+                        </label>
+                    </div>
+
+                    <div class="course-total">
+                        Total Credit Units: <strong id="total-units">0</strong>
+                    </div>
+
+                    <button class="btn btn-primary"
+                        onclick="registerCourses()">Save Registration</button>
+                </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div id="results" class="portal-page hidden">
+                <div class="portal-panel">
+                    <h3>Academic Results</h3>
+                    <p>Sample academic results for demonstration.</p>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Title</th>
+                                    <th>Units</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>CSC 301</td>
+                                    <td>Data Structures</td>
+                                    <td>3</td>
+                                    <td>85</td>
+                                    <td>A</td>
+                                </tr>
+
+                                <tr>
+                                    <td>CSC 302</td>
+                                    <td>Database Systems</td>
+                                    <td>2</td>
+                                    <td>78</td>
+                                    <td>B</td>
+                                </tr>
+
+                                <tr>
+                                    <td>CSC 303</td>
+                                    <td>Software Engineering</td>
+                                    <td>3</td>
+                                    <td>90</td>
+                                    <td>A</td>
+                                </tr>
+
+                                <tr>
+                                    <td>IFT 301</td>
+                                    <td>Web Development</td>
+                                    <td>3</td>
+                                    <td>82</td>
+                                    <td>A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="result-summary">
+                        <h3>Sample GPA: 4.50</h3>
+                        <p>These are demonstration results, not official academic records.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANNOUNCEMENTS -->
+            <div id="announcements" class="portal-page hidden">
+                <div class="portal-panel">
+                    <h3>University Announcements</h3>
+
+                    <div class="announcement-item">
+                        <span>📢</span>
+                        <div>
+                            <h4>Welcome to Glory University</h4>
+                            <p>Welcome to our student portal. We are glad to have you here.</p>
+                        </div>
+                    </div>
+
+                    <div class="announcement-item">
+                        <span>📚</span>
+                        <div>
+                            <h4>Course Registration</h4>
+                            <p>Students are encouraged to complete their course registration.</p>
+                        </div>
+                    </div>
+
+                    <div class="announcement-item">
+                        <span>📅</span>
+                        <div>
+                            <h4>Academic Activities</h4>
+                            <p>Keep checking the academic calendar for important dates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALENDAR PAGE -->
+            <div id="calendar-page" class="portal-page hidden">
+                <div class="portal-panel">
+                    <h3>Academic Calendar</h3>
+
+                    <div class="calendar-item">
+                        <strong>01</strong>
+                        <div>
+                            <h4>Registration Period</h4>
+                            <p>Complete your course registration.</p>
+                        </div>
+                    </div>
+
+                    <div class="calendar-item">
+                        <strong>02</strong>
+                        <div>
+                            <h4>Lectures</h4>
+                            <p>Academic lectures and learning activities.</p>
+                        </div>
+                    </div>
+
+                    <div class="calendar-item">
+                        <strong>03</strong>
+                        <div>
+                            <h4>Examinations</h4>
+                            <p>End-of-semester examinations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE -->
+            <div id="profile" class="portal-page hidden">
+                <div class="portal-panel">
+                    <h3>My Profile</h3>
+
+                    <form id="profile-form">
+                        <label for="profile-name">Full Name</label>
+                        <input type="text" id="profile-name" required>
+
+                        <label for="profile-email">Email Address</label>
+                        <input type="email" id="profile-email" disabled>
+
+                        <label for="profile-department">Department</label>
+                        <input type="text" id="profile-department">
+
+                        <label for="profile-level">Level</label>
+                        <select id="profile-level">
+                            <option>100 Level</option>
+                            <option>200 Level</option>
+                            <option>300 Level</option>
+                            <option>400 Level</option>
+                            <option>500 Level</option>
+                        </select>
+
+                        <label for="profile-photo">Profile Picture</label>
+                        <input type="file" id="profile-photo" accept="image/*">
+
+                        <button type="submit" class="btn btn-primary">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- STUDENT ID -->
+            <div id="student-id" class="portal-page hidden">
+                <div class="portal-panel">
+                    <h3>Digital Student Identity Card</h3>
+
+                    <div class="student-id-card">
+                        <div class="id-header">
+                            <h3>GLORY UNIVERSITY</h3>
+                            <p>STUDENT IDENTITY CARD</p>
+                        </div>
+
+                        <div class="id-body">
+                            <div class="id-photo" id="id-photo">GU</div>
+
+                            <div>
+                                <p>STUDENT NAME</p>
+                                <h3 id="id-name">Student Name</h3>
+
+                                <p>DEPARTMENT</p>
+                                <h4 id="id-department">Department</h4>
+
+                                <p>STUDENT NUMBER</p>
+                                <h4 id="id-number">GU/2026/001</h4>
+
+                                <p>LEVEL</p>
+                                <h4 id="id-level">300 Level</h4>
+                            </div>
+                        </div>
+
+                        <div class="id-footer">
+                            BUILDING MINDS. SHAPING THE FUTURE.
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary"
+                        onclick="window.print()">Print Student ID</button>
+                </div>
+            </div>
+
         </div>
-        <button class="primary-btn" onclick="window.print()">Print / Save ID Card</button>
-      </section>
+    </section>
 
-    </div>
-  </div>
-</section>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>
+            <h2>GLORY UNIVERSITY</h2>
+            <p>Building Minds. Shaping the Future.</p>
+        </div>
 
-<div id="toast" class="toast"></div>
+        <p>© 2026 Glory University. All rights reserved.</p>
+    </footer>
 
-<footer class="footer">
-  <div class="footer-brand"><div class="crest">GU</div><strong>GLORY UNIVERSITY</strong></div>
-  <p>Knowledge • Character • Excellence</p>
-  <p>© 2026 Glory University. Demonstration project.</p>
-</footer>
+    <script src="script.js"></script>
 
-<script src="script.js"></script>
 </body>
 </html>
